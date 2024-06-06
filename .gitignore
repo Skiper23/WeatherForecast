@@ -1,0 +1,5 @@
+.vs/*
+[Dd]ebug*/
+*.vcxproj.user
+*.vcxproj.filters
+output.json
