@@ -158,6 +158,7 @@
     <ClCompile Include="WeatherProcessor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SharedData.h" />
     <ClInclude Include="WeatherFetcher.h" />
     <ClInclude Include="WeatherProcessor.h" />
   </ItemGroup>

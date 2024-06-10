@@ -1,15 +1,18 @@
 #pragma once
 #include <string>
 #include <boost/asio.hpp>
+#include "SharedData.h"
 using namespace boost::asio;
 using ip::tcp;
 
 class WeatherFetcher
 {
-	double latitude, longitude;
-public:
-	WeatherFetcher();
+	SharedData& shared_data;
+
 	std::string readChunkedResponse(tcp::socket& socket);
 	void callAPI();
 
+public:
+	WeatherFetcher(SharedData& shared);
+	void operator()();
 };
