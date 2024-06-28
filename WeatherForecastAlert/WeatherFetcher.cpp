@@ -12,7 +12,7 @@ void WeatherFetcher::operator() ()
     while (true)
     {
         callAPI();
-        boost::this_thread::sleep_for(boost::chrono::minutes(10));
+        boost::this_thread::sleep_for(boost::chrono::minutes(REFRESH_TIME));
     }
 }
 
@@ -30,7 +30,7 @@ void WeatherFetcher::callAPI()
 
         boost::asio::streambuf request;
         std::ostream request_stream(&request);
-        request_stream << "GET /v1/forecast?latitude=53.07&longitude=20.14&hourly=temperature_2m,rain,wind_speed_10m HTTP/1.1\r\nHost: api.open-meteo.com\r\nAccept: */*\r\nConnection: close\r\n\r\n";
+        request_stream << "GET /v1/forecast?latitude=51.10&longitude=17.03&hourly=temperature_2m,rain HTTP/1.1\r\nHost: api.open-meteo.com\r\nAccept: */*\r\nConnection: close\r\n\r\n";
         write(socket, request);
 
         std::string response = readChunkedResponse(socket);
@@ -52,7 +52,6 @@ std::string WeatherFetcher:: readChunkedResponse(tcp::socket& socket)
     boost::asio::streambuf response;
     boost::system::error_code error;
     std::ostringstream response_stream;
-    std::string line;
 
     while (boost::asio::read(socket, response, boost::asio::transfer_at_least(1), error)) 
     {
@@ -69,6 +68,7 @@ std::string WeatherFetcher:: readChunkedResponse(tcp::socket& socket)
     std::size_t body_start = full_response.find("\r\n\r\n");
     if (body_start != std::string::npos) 
     {
+        // jump to the beginning of the response body
         body_start += 4;
     }
     else 

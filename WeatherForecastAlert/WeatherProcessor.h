@@ -12,6 +12,10 @@ class WeatherProcessor
 	boost::json::array temperatures;
 	boost::json::array rains;
 	boost::json::array winds;
+	double const UPPER_TEMPERATURE_ALERT = 10.0;
+	double const LOWER_TEMPERATURE_ALERT = 0.0;
+	double const RAIN_ALERT = 2.0;
+	double const WIND_ALERT = 10.0;
 
 	void ParseJSON(std::string data);
 	void makeNotification();

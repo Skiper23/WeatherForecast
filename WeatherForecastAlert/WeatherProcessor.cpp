@@ -16,9 +16,9 @@ void WeatherProcessor::operator() ()
 	{
 		std::unique_lock<std::mutex> lock(shared_data.thread_mutex);
 		shared_data.thread_condition_variable.wait(lock, [this]() 
-			{
-				return !shared_data.thread_queue.empty();
-			});
+		{
+			return !shared_data.thread_queue.empty();
+		});
 		std::string data = shared_data.thread_queue.front();
 		shared_data.thread_queue.pop();
 		lock.unlock();
@@ -63,19 +63,19 @@ void WeatherProcessor::makeNotification()
 	for (int i = 0; i < size; i++)
 	{
 		std::string message = "";
-		if (temperatures[i].as_double() > 25.0)
+		if (temperatures[i].as_double() > UPPER_TEMPERATURE_ALERT)
 		{
-			message = "wysoka temperatura ";
+			message = "UWAGA wysoka temperatura ";
 			message += std::to_string(temperatures[i].as_double());
 		}
-		if (temperatures[i].as_double() < 0.0)
+		if (temperatures[i].as_double() < LOWER_TEMPERATURE_ALERT)
 		{
-			message = "temeratura poni¿ej zera ";
+			message = "UWAGA niska temperatura ";
 			message += std::to_string(temperatures[i].as_double());
 		}
 		if (rains.size() > 0)
 		{
-			if (rains[i].as_double() > 2.0)
+			if (rains[i].as_double() > RAIN_ALERT)
 			{
 				if (!message.empty())
 				{
@@ -87,7 +87,7 @@ void WeatherProcessor::makeNotification()
 		}
 		if (winds.size() > 0)
 		{
-			if (winds[i].as_double() > 30.0)
+			if (winds[i].as_double() > WIND_ALERT)
 			{
 				if (!message.empty())
 				{
@@ -99,7 +99,7 @@ void WeatherProcessor::makeNotification()
 		}
 		if (!message.empty())
 		{
-			std::cout << message << " w dniu " << times[i].as_string().c_str() << '\n';
+			std::cout << message << " przewidywane " << times[i].as_string().c_str() << '\n';
 		}
 	}
 	std::cout << "\n\n";
